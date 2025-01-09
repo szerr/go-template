@@ -1,0 +1,181 @@
+definitions:
+  domain.SigIn:
+    properties:
+      password:
+        type: string
+      user:
+        type: string
+    required:
+    - password
+    - user
+    type: object
+  domain.UserListRequest:
+    properties:
+      date_type:
+        type: string
+      end_time:
+        type: integer
+      page_num:
+        type: integer
+      page_size:
+        type: integer
+      start_time:
+        type: integer
+    required:
+    - page_num
+    - page_size
+    type: object
+  model.SysUser:
+    properties:
+      email:
+        description: 邮箱
+        type: string
+      group_name:
+        description: 角色名
+        type: string
+      id:
+        type: integer
+      nick_name:
+        description: 暱称
+        type: string
+      password:
+        description: 密码
+        type: string
+      user_name:
+        description: 用户名
+        type: string
+    type: object
+info:
+  contact: {}
+  description: description
+  title: go-template
+  version: v0.0.1
+paths:
+  /auth/sig_in:
+    post:
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.SigIn'
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: SigIn
+      tags:
+      - Auth
+  /auth/sig_out:
+    post:
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          type: object
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SysUser'
+      security:
+      - SigOut: []
+      tags:
+      - Auth
+  /user/create:
+    post:
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.SysUser'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SysUser'
+      security:
+      - ApiKeyAuth: []
+      summary: Create User
+      tags:
+      - User
+  /user/delete/{id}:
+    get:
+      parameters:
+      - description: unique id
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SysUser'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete role record by ID
+      tags:
+      - User
+  /user/list:
+    post:
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UserListRequest'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SysUser'
+      security:
+      - ApiKeyAuth: []
+      summary: List User
+      tags:
+      - User
+  /user/retrieve/{id}:
+    get:
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SysUser'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieve User
+      tags:
+      - User
+  /user/update:
+    post:
+      parameters:
+      - description: Request body
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/model.SysUser'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SysUser'
+      security:
+      - ApiKeyAuth: []
+      summary: Update User
+      tags:
+      - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
